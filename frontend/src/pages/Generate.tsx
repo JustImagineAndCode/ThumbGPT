@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import BackDrops from "../components/BackDrops";
-import { colorSchemes, type AspectRatio, type IThumbnail, type ThumbnailStyle } from "../../public/assets/assets";
+import { colorSchemes, dummyThumbnails, type AspectRatio, type IThumbnail, type ThumbnailStyle } from "../../public/assets/assets";
 import AspectRatioSelector from "../components/AspectRatioSelector";
 import StyleSelector from "../components/StyleSelector";
 import ColorSchemeSelector from "../components/ColorSchemeSelector";
@@ -21,10 +21,31 @@ function Generate() {
 
     const [styleDropdownOpen ,setStyleDropdownOpen] = useState(false);
 
+    const handleGenerate = async ()=>{
 
 
+    }
 
+    const fetchThumbnail = async ()=> {
+        if(id){
+            const thumbnail : any = dummyThumbnails.find((thumbnail) => thumbnail._id === id);
+            setThumbnail(thumbnail);
+            setAdditionalDetails(thumbnail.user_prompt);
+            setTitle(thumbnail.title);
+            setColorSchemeID(thumbnail.color_scheme);
+            setStyle(thumbnail.style);
+            setAspectRatio(thumbnail.aspect_ratio);
+            setLoading(false);
 
+        }
+    }
+
+    useEffect(() => {
+      if(id){
+        fetchThumbnail();
+      }
+      }, [id])
+    
   return (
    <>
    <BackDrops/>
@@ -71,7 +92,7 @@ function Generate() {
                         </div>
                         {/* button */}
                         { !id && (
-                            <button className="text-sm w-full py-2.5 rounded-xl 
+                            <button onClick={handleGenerate} className="text-sm w-full py-2.5 rounded-xl 
                             font-medium bg-linear-to-b from-pink-500 to-pink-600
                             hover:from-pink-700 disabled:cursor-not-allowed">
                                 {loading ? 'Generating...' : 'Generate Thumbnail'}
