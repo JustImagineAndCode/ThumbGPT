@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import BackDrops from "../components/BackDrops"
 import { dummyThumbnails, type IThumbnail } from "../../public/assets/assets"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowUpRightIcon, DownloadIcon, Trash2Icon } from "lucide-react";
 
 
 function MyGeneration() {
@@ -63,7 +64,7 @@ const navigate =useNavigate();
             {thumbnails.map((thumb: IThumbnail) => {
               const aspectClass = aspectRatioClassMap[thumb.aspect_ratio || '16:9']
               return (
-                <div key={thumb._id} onClick={()=> navigate(`/generate/${thumb._id}`)} className="mb-8 group relativeative cursor-pointer rounded-2xl bg-white/6 border border-white/10 transition shadow-xl break-inside-avoid">
+                <div key={thumb._id} onClick={()=> navigate(`/generate/${thumb._id}`)} className="mb-8 group relative cursor-pointer rounded-2xl bg-white/6 border border-white/10 transition shadow-xl break-inside-avoid">
                   {/**Image */}
                   <div className = {`relative overflow-hidden rounded-t-2xl ${aspectClass} bg-black`}>
                     {thumb.image_url ? (
@@ -76,6 +77,30 @@ const navigate =useNavigate();
                       {thumb.isGenerating && <div className="absolute inset-0 bg-black/50 flex items-center justify-center 
                       text-sm font-medium text-white">Generating...</div>}
                   </div>
+
+                  {/**Content */}
+                  <div className=" p-4 space-y-2">
+                    
+                    <h3 className=" text-sm font-semibold text-zinc-100 line-clamp-2">{thumb.title}</h3>
+                   <div className="flex flex-wrap gap-2 text-xs text-zinc-100 line-clamp-2">
+                    <span className="px-2 py-0.5 rounded bg-white/8">{thumb.style}</span>
+                    <span className="px-2 py-0.5 rounded bg-white/8">{thumb.aspect_ratio}</span>
+                    <span className="px-2 py-0.5 rounded bg-white/8">{thumb.color_scheme}</span>
+                    
+                   </div>
+                   
+                    <p className=" text-xs text-zinc-500">{new Date(thumb.createdAt!).toDateString()}</p>
+                  </div>
+                          <div onClick={(e)=>e.stopPropagation()} className="absolute bottom-2 right-2 z-10 flex gap-1.5 opacity-100 transition-opacity duration-200">
+                            <Trash2Icon onClick={()=> handleDelete(thumb._id)}
+                            className="size-6 cursor-pointer bg-black/50 p-1 rounded hover:bg-pink-500 transition-all text-white"/>
+
+                            <DownloadIcon onClick={()=> handleDownload(thumb.image_url!)}
+                            className="size-6 cursor-pointer bg-black/50 p-1 rounded hover:bg-pink-500 transition-all text-white"/>
+                          <Link target="_blank" to={`/preview?thumbnail_url=${thumb.image_url}&title=${thumb.title}`} className="flex items-center justify-center">
+                            <ArrowUpRightIcon className="size-6 bg-black/50 p-1 rounded hover:bg-pink-500 transition-all text-white"/> 
+                          </Link>
+                          </div>
                 </div>
               )
             })}

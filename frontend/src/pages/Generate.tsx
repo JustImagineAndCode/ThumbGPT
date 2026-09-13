@@ -46,7 +46,7 @@ function Generate() {
       }
       }, [id])
     
-  return (
+  return ( 
    <>
    <BackDrops/>
     <div className=" pt-24 min-h-screen"> 
