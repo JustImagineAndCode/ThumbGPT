@@ -89,7 +89,7 @@ import User from '../models/User.js';
         return res.status(500).json({message: error.message})
     }
  })
-        return res.status(500).json({message: 'Logout successful'})
+        return res.status(200).json({message: 'Logout successful'})
 
 }
 
